@@ -1,0 +1,6 @@
+<div fxLayout="row" class="snack-container">
+    <station-warnings class="snack-container__station" *ngFor="let stationWarnings of data" [data]="stationWarnings">
+    </station-warnings>
+
+    <button mat-button color="warn" (click)="dismiss()">Acknowledge</button>
+</div>

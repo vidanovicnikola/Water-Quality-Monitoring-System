@@ -1,0 +1,13 @@
+<div class="station-warnings">
+    <div class="station-warnings__header">
+        <span>{{ data.station.station_name }}, {{ data.station.station_id}}</span>
+    </div>
+
+    <div class="station-warnings__main">
+        <div class="station-warnings__main-warning" *ngFor="let warning of data.warnings">
+            <mat-icon>{{ warning.icon }}</mat-icon>
+            <span>{{ warning.message }}: </span>
+            <span class="station-warnings__main-warning-value">{{ warning.value }} {{ warning.unit }}</span>
+        </div>
+    </div>
+</div>

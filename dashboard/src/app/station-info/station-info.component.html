@@ -1,0 +1,31 @@
+<div class="station-info" *ngIf="stationInfoLoading == false && stationInfo != null; else loadingIndicator">
+    <div class="station-info__header">
+        <div class="station-info__header-title">
+            <h3>Station Name: <label>{{ stationInfo.station_name }}</label></h3>
+            <h5>Station Owner: <label>{{ stationInfo.station_owner }}</label></h5>
+        </div>
+
+
+    </div>
+
+    <mat-tab-group class="station-info__main" animationDuration="0ms">
+        <mat-tab label="Dashboard">
+            <station-dashboard [stationLatestData]="stationInfo">
+            </station-dashboard>
+        </mat-tab>
+        <mat-tab label="History">
+            <ng-template matTabContent>
+                <signals [charts]="charts" [signalsLoading]="signalsLoading" (loadData)="loadData($event)"></signals>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+
+
+
+</div>
+
+<ng-template #loadingIndicator>
+    <div class="spinner">
+        <mat-spinner [diameter]="150"></mat-spinner>
+    </div>
+</ng-template>

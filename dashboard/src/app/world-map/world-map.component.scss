@@ -1,0 +1,21 @@
+.world-map {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    padding-top: 10px;
+    height: 50px;
+    text-transform: uppercase;
+  }
+
+  &__main {
+    height: calc(100% - 65px);
+  }
+
+  &__separator {
+    height: 1px;
+    background: black;
+    margin: 0 0 10px 0;
+  }
+}

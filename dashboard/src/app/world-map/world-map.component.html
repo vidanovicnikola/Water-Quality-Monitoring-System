@@ -1,0 +1,19 @@
+<div class="world-map">
+    <div class="world-map__header">
+        <h3> National Oceanic & Atmospheric Administration </h3>
+    </div>
+
+    <div class="world-map__separator"></div>
+
+    <div class="world-map__main">
+        <google-map height="100%" width="100%" [center]="{ lat: 23.67, lng: -40.46 }" [zoom]="2">
+            <map-marker *ngFor="let marker of markers" station-tooltip
+                [position]="{ lat: +marker.lat, lng: +marker.lon }"
+                [options]="{ draggable: false, animation: marker.animation }"
+                [tooltipData]="{station: marker, warnings: extendedWarnings | warningsFilter : marker.station_id}"
+                (mapClick)="onMarkerClick(marker.station_id)">
+
+            </map-marker>
+        </google-map>
+    </div>
+</div>

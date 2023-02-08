@@ -1,0 +1,22 @@
+<mat-drawer-container class="container">
+    <mat-drawer class="sidebar" mode="side" opened>
+        <div class="sidebar-item" [routerLink]="['/']">
+            <mat-icon aria-hidden="false" fontIcon="home"></mat-icon> <span>Home</span>
+        </div>
+        <div class="sidebar-item" [routerLink]="['/stations']">
+            <mat-icon aria-hidden="false" fontIcon="equalizer"></mat-icon> <span>Stations</span>
+        </div>
+        <div class="sidebar-item" [routerLink]="['/dewpoint_temp_degc']">
+            <mat-icon aria-hidden="false" fontIcon="device_thermostat"></mat-icon> <span>Temperature</span>
+        </div>
+        <div class="sidebar-item" [routerLink]="['/significant_wave_height_m']">
+            <mat-icon aria-hidden="false" fontIcon="waves"></mat-icon> <span>Waves</span>
+        </div>
+        <div station-tooltip class="sidebar-item" [routerLink]="['/wind_speed_mps']">
+            <mat-icon aria-hidden="false" fontIcon="air"></mat-icon> <span>Wind</span>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <router-outlet></router-outlet>
+    </mat-drawer-content>
+</mat-drawer-container>

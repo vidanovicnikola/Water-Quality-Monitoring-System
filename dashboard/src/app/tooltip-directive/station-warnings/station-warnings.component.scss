@@ -1,0 +1,25 @@
+.station-warnings {
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    padding-bottom: 7;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+
+    &-warning {
+      display: flex;
+      align-items: center;
+      border-top: 1px dashed white;
+
+      &-value {
+        margin-left: 5px;
+        color: #af2bbf;
+      }
+    }
+  }
+}

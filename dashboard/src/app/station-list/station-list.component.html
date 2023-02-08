@@ -1,0 +1,77 @@
+<div class="station">
+    <div *ngIf="stations != null; else loading" class="station-list">
+        <table mat-table [dataSource]="stations" multiTemplateDataRows class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{ element.station_id }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{ element.station_name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="owner">
+                <th mat-header-cell *matHeaderCellDef> Owner </th>
+                <td mat-cell *matCellDef="let element"> {{ element.station_owner }} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="expand">
+                <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button (click)="navigateToStation(element.station_id)">
+                        <mat-icon>dashboard</mat-icon>
+                    </button>
+
+                    <button mat-icon-button aria-label="expand row"
+                        (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                        <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                        <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                    <div class="station-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <h5>Latest measurements</h5>
+                        <div class="station-detail-group">
+                            <span class="station-detail-item">pressure:
+                                <label>{{ element.sea_level_pressure_hpa }}</label> hPa
+                            </span>
+                            <span class="station-detail-item">temperature:
+                                <label>{{ element.sea_surface_temp_degc }} </label> °
+                            </span>
+                        </div>
+                        <div class="station-detail-group">
+                            <span class="station-detail-item">wind direction: <label> {{ element.wind_dir_degt }}
+                                </label>
+                                degrees
+                            </span>
+                            <span class="station-detail-item">wind speed: <label> {{ element.wind_speed_mps }} </label>
+                                m/s
+                            </span>
+                        </div>
+
+
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="station-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+    </div>
+    <ng-template #loading>
+        <div class="spinner">
+            <mat-spinner [diameter]="150"></mat-spinner>
+        </div>
+    </ng-template>
+</div>

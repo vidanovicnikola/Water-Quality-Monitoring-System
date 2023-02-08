@@ -1,0 +1,26 @@
+<div class="signals">
+    <div class="signals__header-date">
+        <mat-form-field appearance="fill">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="load()">Load</button>
+    </div>
+    <div class="signals__main" *ngIf="signalsLoading == false; else signalsLoadingIndicator">
+        <highcharts-chart *ngFor="let chart of charts" [Highcharts]="Highcharts" [options]="chart"
+            style="width: 100%; height: 400px; display: block;">
+        </highcharts-chart>
+    </div>
+
+    <ng-template #signalsLoadingIndicator>
+        <div class="spinner">
+            <mat-spinner [diameter]="150"></mat-spinner>
+        </div>
+    </ng-template>
+</div>

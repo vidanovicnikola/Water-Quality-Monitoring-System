@@ -1,0 +1,28 @@
+<div class="station-dashboard">
+    <highcharts-chart [Highcharts]="Highcharts" [options]="temperatureChart"
+        style="width: 100%; height: 400px; display: block;">
+    </highcharts-chart>
+
+    <div style="width: 100%; height: 350px; display: flex;">
+        <highcharts-chart [Highcharts]="Highcharts" [options]="pressureChart"
+            style="width: 50%; height: 350px; display: block;">
+        </highcharts-chart>
+
+        <highcharts-chart [Highcharts]="Highcharts" [options]="windSpeedChart"
+            style="width: 50%; height: 350px; display: block;">
+        </highcharts-chart>
+
+    </div>
+
+    <highcharts-chart [Highcharts]="Highcharts" [options]="waterLevelChart"
+        style="width: 100%; height: 200px; display: block;">
+    </highcharts-chart>
+
+    <highcharts-chart [Highcharts]="Highcharts" [options]="waveHeightChart"
+        style="width: 100%; height: 200px; display: block;">
+    </highcharts-chart>
+
+    <highcharts-chart [Highcharts]="Highcharts" [options]="wavePeriodChart"
+        style="width: 100%; height: 400px; display: block;">
+    </highcharts-chart>
+</div>
