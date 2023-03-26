@@ -1,17 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { BehaviorSubject } from 'rxjs';
 import { Warning } from 'src/model/warning';
 import { ImportedInfluxObject, InfluxObject } from 'src/model/influx-object';
-import { WaterQualityRepository } from 'src/repository/water-quality-repository';
-import { ConfigService } from './config-service';
+import { ConfigService } from './config.service';
+import { IWaterQualityRepository } from 'src/repository/water-quality-repository-interface';
 
 @Injectable()
 export class ImportDataService {
-  alertUser$ = new BehaviorSubject<unknown[]>([]);
+  alertUser$ = new BehaviorSubject<Warning[]>([]);
 
   constructor(
-    private waterQualityRepository: WaterQualityRepository,
+    @Inject('IWaterQualityRepository')
+    private waterQualityRepository: IWaterQualityRepository,
     private configService: ConfigService,
   ) {}
 

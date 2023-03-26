@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ChartDataModel } from 'src/model/chart-data-model';
 import { InfluxObject } from 'src/model/influx-object';
-import { Marker } from 'src/model/marker';
-import { WaterQualityRepository } from 'src/repository/water-quality-repository';
+import { IWaterQualityRepository } from 'src/repository/water-quality-repository-interface';
 
 @Injectable()
 export class WaterQualityService {
-  constructor(private waterQualityRepository: WaterQualityRepository) {}
+  constructor(
+    @Inject('IWaterQualityRepository')
+    private waterQualityRepository: IWaterQualityRepository,
+  ) {}
 
   getStationInfo(stationId: string) {
     return this.waterQualityRepository.getStationInfo(stationId);

@@ -33,7 +33,7 @@ export class WorldMapComponent implements OnInit {
 
   ngOnInit(): void {
     const eventSource = new EventSource(
-      'http://localhost:3000/WaterQuality/sse'
+      'http://localhost:3000/WaterQuality/Warnings'
     );
     eventSource.onmessage = ({ data }) => {
       let newWarnings = JSON.parse(data) as Warning[];
@@ -80,7 +80,10 @@ export class WorldMapComponent implements OnInit {
           warnings: this.warningsFilter.transform(this.extendedWarnings, x),
         } as StationWarnings)
     );
-    this.snackBar.openSnackBar(snackBarData);
+
+    if (snackBarData.length > 0) {
+      this.snackBar.openSnackBar(snackBarData);
+    }
   }
 
   updateMarkers(

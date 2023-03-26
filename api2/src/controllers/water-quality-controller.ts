@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { interval, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ImportDataService } from 'src/services/import-data-service';
-import { WaterQualityService } from 'src/services/water-quality-service';
+import { ImportDataService } from 'src/services/import-data.service';
+import { WaterQualityService } from 'src/services/water-quality.service';
 
 @Controller('WaterQuality')
 export class WaterQualityController {
@@ -58,8 +58,8 @@ export class WaterQualityController {
     return this.waterQualityService.getAllStations();
   }
 
-  @Sse('sse')
-  sse(): Observable<MessageEvent> {
+  @Sse('Warnings')
+  alertUser(): Observable<MessageEvent> {
     return this.importDataService.alertUser$.pipe(
       map((data) => ({ data } as MessageEvent)),
     );
