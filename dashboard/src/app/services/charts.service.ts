@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
+import { MatTextColumn } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
+import { AppConfig } from '../model/app-config';
 import { ChartDataModel } from '../model/chart-data-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChartsService {
-  getStandardChart(chart: ChartDataModel): Highcharts.Options {
+  getStandardChart(
+    chart: ChartDataModel,
+    normalRange?: { signal: string; min: number; max: number }
+  ): Highcharts.Options {
+    const minValue = Math.min(...chart.data.map((x) => x[1]));
+    const maxValue = Math.max(...chart.data.map((x) => x[1]));
     return {
       series: [
         {
@@ -23,6 +30,32 @@ export class ChartsService {
       },
       xAxis: {
         type: 'datetime',
+      },
+      yAxis: {
+        plotBands: [
+          {
+            from: Number.MIN_SAFE_INTEGER,
+            to: normalRange?.min,
+            color: 'rgba(68, 170, 213, 0.1) ',
+            label: {
+              text: 'Low',
+              style: {
+                color: '#606060',
+              },
+            },
+          },
+          {
+            from: normalRange?.max,
+            to: Number.MAX_SAFE_INTEGER,
+            color: 'rgba(68, 170, 213, 0.1) ',
+            label: {
+              text: 'High',
+              style: {
+                color: '#606060',
+              },
+            },
+          },
+        ],
       },
       marker: {
         radius: 2,

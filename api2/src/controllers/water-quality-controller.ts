@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { interval, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ConfigService } from 'src/services/config.service';
 import { ImportDataService } from 'src/services/import-data.service';
 import { WaterQualityService } from 'src/services/water-quality.service';
 
@@ -16,6 +17,7 @@ export class WaterQualityController {
   constructor(
     private waterQualityService: WaterQualityService,
     private importDataService: ImportDataService,
+    private configService: ConfigService,
   ) {}
 
   @Get('Signals')
@@ -63,5 +65,10 @@ export class WaterQualityController {
     return this.importDataService.alertUser$.pipe(
       map((data) => ({ data } as MessageEvent)),
     );
+  }
+
+  @Get('SignalRanges')
+  signalRanges() {
+    return this.configService.loadConfigFromFile();
   }
 }

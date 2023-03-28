@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { map } from 'rxjs';
+import { forkJoin, map } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
+import { AppConfig } from '../model/app-config';
 import { ChartDataModel } from '../model/chart-data-model';
 import { Marker } from '../model/marker';
 import { Station } from '../model/station';
@@ -14,6 +15,10 @@ import { ChartsService } from './charts.service';
 export class DataService {
   baseUrl = 'http://localhost:3000/WaterQuality';
   constructor(private http: HttpClient, private charts: ChartsService) {}
+
+  getSignalsRange(): Observable<AppConfig> {
+    return this.http.get<AppConfig>(`${this.baseUrl}/SignalRanges`);
+  }
 
   getStationInfo(stationId: string): Observable<Station[]> {
     const httpParams = new HttpParams().append('id', stationId);
@@ -38,15 +43,23 @@ export class DataService {
       .append('end', endDate.toUTCString())
       .append('numberOfPoints', numberOfPoints);
 
-    return this.http
-      .get<ChartDataModel[]>(`${this.baseUrl}/Signals`, {
+    const signals$ = this.http.get<ChartDataModel[]>(
+      `${this.baseUrl}/Signals`,
+      {
         params: httpParams,
-      })
-      .pipe(
-        map((charts) =>
-          charts.map((chart) => this.charts.getStandardChart(chart))
+      }
+    );
+    const ranges$ = this.getSignalsRange();
+    return forkJoin([signals$, ranges$]).pipe(
+      map(([charts, ranges]) =>
+        charts.map((chart) =>
+          this.charts.getStandardChart(
+            chart,
+            ranges.normalValues.find((x) => x.signal == chart.titile)
+          )
         )
-      );
+      )
+    );
   }
 
   getAllSignals(
@@ -61,14 +74,22 @@ export class DataService {
       .append('end', endDate.toUTCString())
       .append('numberOfPoints', numberOfPoints);
 
-    return this.http
-      .get<ChartDataModel[]>(`${this.baseUrl}/SignalData`, {
+    const signals$ = this.http.get<ChartDataModel[]>(
+      `${this.baseUrl}/SignalData`,
+      {
         params: httpParams,
-      })
-      .pipe(
-        map((charts) =>
-          charts.map((chart) => this.charts.getStandardChart(chart))
+      }
+    );
+    const ranges$ = this.getSignalsRange();
+    return forkJoin([signals$, ranges$]).pipe(
+      map(([charts, ranges]) =>
+        charts.map((chart) =>
+          this.charts.getStandardChart(
+            chart,
+            ranges.normalValues.find((x) => x.signal == signalName)
+          )
         )
-      );
+      )
+    );
   }
 }

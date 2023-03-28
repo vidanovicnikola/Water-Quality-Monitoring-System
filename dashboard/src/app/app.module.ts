@@ -26,6 +26,8 @@ import { TooltipModule } from './tooltip-directive/tooltip-module';
 import { WarningsFilterPipe } from './pipes/warnings-filter.pipe';
 import { SignalsComponent } from './signals/signals.component';
 import { SignalsPageComponent } from './signals-page/signals-page.component';
+import { SettingsComponent } from './settings-page/settings-page.component';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { SignalsPageComponent } from './signals-page/signals-page.component';
     WarningsFilterPipe,
     SignalsComponent,
     SignalsPageComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +61,7 @@ import { SignalsPageComponent } from './signals-page/signals-page.component';
     MatProgressSpinnerModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatSliderModule,
   ],
   providers: [WarningsFilterPipe],
   bootstrap: [AppComponent],

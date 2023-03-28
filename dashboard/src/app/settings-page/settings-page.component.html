@@ -1,0 +1,23 @@
+<div class="settings-page">
+    <div class="settings-page__header">
+        <h3 class="settings-page__header-title">
+            Settings
+        </h3>
+    </div>
+    <div class="settings-page__separator"></div>
+
+    <div class="settings-page__main">
+        <div class="settings-page__main-signal" *ngFor="let range of signalsValueRanges">
+            <div class="settings-page__main-signal-name">{{ range.signal }}</div>
+            <div class="settings-page__main-signal-range">
+                <mat-slider min="200" max="500">
+                    <input value="300" matSliderStartThumb>
+                    <input value="400" matSliderEndThumb>
+                </mat-slider>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

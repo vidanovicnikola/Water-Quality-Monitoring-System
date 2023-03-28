@@ -20,7 +20,7 @@ export class ConfigService {
     }
   }
 
-  private loadConfigFromFile(): AppConfig {
+  loadConfigFromFile(): AppConfig {
     if (fs.existsSync(this.configPath)) {
       const data = fs.readFileSync(this.configPath);
       return JSON.parse(data.toString());
