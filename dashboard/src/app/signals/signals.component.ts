@@ -19,7 +19,6 @@ export const FACTOR = 60;
 })
 export class SignalsComponent implements OnInit, OnDestroy {
   @Input() charts: Highcharts.Options[];
-  @Input() signalsLoading: boolean;
   @Output() loadData = new EventEmitter<{
     start: Date;
     end: Date;

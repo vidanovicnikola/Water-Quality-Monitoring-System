@@ -18,8 +18,7 @@ export class StationInfoComponent implements OnInit {
   stationId: string;
 
   charts: Highcharts.Options[];
-  stationInfoLoading: boolean;
-  signalsLoading: boolean;
+  // stationInfoLoading: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,17 +28,16 @@ export class StationInfoComponent implements OnInit {
   ngOnInit(): void {
     this.stationId = this.route.snapshot.paramMap.get('Id') as string;
 
-    this.stationInfoLoading = true;
+    // this.stationInfoLoading = true;
     this.dataService
       .getStationInfo(this.stationId)
-      .pipe(finalize(() => (this.stationInfoLoading = false)))
+      // .pipe(finalize(() => (this.stationInfoLoading = false)))
       .subscribe((stations) => {
         this.stationInfo = stations[0];
       });
   }
 
   loadData(event: { start: Date; end: Date; numberOfPoints: number }): void {
-    this.signalsLoading = true;
     this.dataService
       .getSignalsForStation(
         this.stationId as string,
@@ -47,10 +45,7 @@ export class StationInfoComponent implements OnInit {
         event.end,
         event.numberOfPoints
       )
-      .pipe(
-        first(),
-        finalize(() => (this.signalsLoading = false))
-      )
+      .pipe(first())
       .subscribe((data) => {
         this.charts = data;
       });

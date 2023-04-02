@@ -46,6 +46,10 @@ export class WaterQualityService {
     return this.waterQualityRepository.getAllStations();
   }
 
+  getDistinctSignalNames(): Promise<string[]> {
+    return this.waterQualityRepository.getDistinctSignalNames();
+  }
+
   private groupDataByStations(
     data: InfluxObject[],
     titlePropertyName: keyof InfluxObject,
@@ -63,7 +67,7 @@ export class WaterQualityService {
       const dataPoints = data.filter(
         (x) => x.table === table && x.stationId != null,
       );
-      console.log(dataPoints[0]);
+
       result.push({
         titile: dataPoints[0][titlePropertyName] as string,
         data: dataPoints.map((dp) => [dp.time.getTime(), dp.value]),

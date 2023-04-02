@@ -15,6 +15,8 @@ export interface IWaterQualityRepository {
     numberOfPoints: number,
   ): Promise<InfluxObject[]>;
 
+  getDistinctSignalNames(): Promise<string[]>;
+
   getStationInfo(stationId: string): Promise<string[]>;
 
   getAllStations(): Promise<ImportedInfluxObject[]>;

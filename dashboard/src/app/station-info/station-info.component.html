@@ -1,4 +1,4 @@
-<div class="station-info" *ngIf="stationInfoLoading == false && stationInfo != null; else loadingIndicator">
+<div class="station-info" *ngIf="stationInfo != null; else loadingIndicator">
     <div class="station-info__header">
         <div class="station-info__header-title">
             <h3>Station Name: <label>{{ stationInfo.station_name }}</label></h3>
@@ -15,7 +15,7 @@
         </mat-tab>
         <mat-tab label="History">
             <ng-template matTabContent>
-                <signals [charts]="charts" [signalsLoading]="signalsLoading" (loadData)="loadData($event)"></signals>
+                <signals [charts]="charts" (loadData)="loadData($event)"></signals>
             </ng-template>
         </mat-tab>
     </mat-tab-group>

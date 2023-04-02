@@ -14,7 +14,6 @@ export const FACTOR = 60;
 export class SignalsPageComponent implements OnInit, OnDestroy {
   signalName: string;
   charts: Highcharts.Options[];
-  signalsLoading: boolean;
 
   destroy$ = new Subject<void>();
   constructor(
@@ -30,7 +29,6 @@ export class SignalsPageComponent implements OnInit, OnDestroy {
   }
 
   loadData(event: { start: Date; end: Date; numberOfPoints: number }): void {
-    this.signalsLoading = true;
     this.dataService
       .getAllSignals(
         this.signalName,
@@ -38,10 +36,7 @@ export class SignalsPageComponent implements OnInit, OnDestroy {
         event.end,
         event.numberOfPoints
       )
-      .pipe(
-        first(),
-        finalize(() => (this.signalsLoading = false))
-      )
+      .pipe(first())
       .subscribe((data) => {
         this.charts = data;
       });

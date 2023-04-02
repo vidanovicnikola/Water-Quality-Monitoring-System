@@ -1,23 +1,36 @@
 <div class="settings-page">
-    <div class="settings-page__header">
-        <h3 class="settings-page__header-title">
-            Settings
-        </h3>
-    </div>
-    <div class="settings-page__separator"></div>
+    <div class="settings-page__main" *ngIf="config">
+        <div class="settings-page__main-signal" *ngFor="let signal of config.signals">
+            <div class="settings-page__main-signal-name">
 
-    <div class="settings-page__main">
-        <div class="settings-page__main-signal" *ngFor="let range of signalsValueRanges">
-            <div class="settings-page__main-signal-name">{{ range.signal }}</div>
-            <div class="settings-page__main-signal-range">
-                <mat-slider min="200" max="500">
-                    <input value="300" matSliderStartThumb>
-                    <input value="400" matSliderEndThumb>
-                </mat-slider>
-
+                <select [(ngModel)]="signal.name" (change)="setAvailableSignals()">
+                    <option [value]="signal.name">{{signal.name}}</option>
+                    <option *ngFor="let signalName of availableSignals" [value]="signalName">
+                        {{signalName}}
+                    </option>
+                </select>
             </div>
-
+            <div class="settings-page__main-signal-range">
+                <input class="settings-page__main-signal-range-display" type="number"
+                    [(ngModel)]="signal.displayRange.from">
+                <mat-slider [min]="signal.displayRange.from" [max]="signal.displayRange.to" showTickMarks discrete>
+                    <input [(value)]="signal.optimalRange.from" matSliderStartThumb>
+                    <input [(value)]="signal.optimalRange.to" matSliderEndThumb>
+                </mat-slider>
+                <input class="settings-page__main-signal-range-display" type="number"
+                    [(ngModel)]="signal.displayRange.to">
+            </div>
         </div>
+
+        <div class="settings-page__main-add">
+            <mat-icon color="primary" class="settings-page__main-add-icon" fontIcon="add_box" position sticky bottom
+                (click)="onAddSignalSettings()"></mat-icon>
+        </div>
+    </div>
+
+    <div class="settings-page__actions">
+        <button mat-raised-button color="primary" class="mr-10" (click)="onSaveClick()">Save</button>
+        <button mat-stroked-button color="primary" (click)="setConfigAndCopy(configCopy)">Reset</button>
     </div>
 
 </div>

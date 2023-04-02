@@ -31,6 +31,24 @@ export class WaterQualityRepository implements IWaterQualityRepository {
     );
   }
 
+  getDistinctSignalNames(): Promise<string[]> {
+    const query = `from(bucket: "${this.influxDbConnection.bucket}")
+                    |> range(start: -1y)
+                    |> keep(columns: ["_field"])
+                    |> distinct()`;
+
+    return this.influxDbConnection.queryApi
+      .collectRows(query)
+      .then((signals: ImportedInfluxObject[]) =>
+        signals
+          .map((s) => s._field)
+          .filter(
+            (s) =>
+              !this.configService.unsupportedSignalsForLineChart.includes(s),
+          ),
+      );
+  }
+
   getSignalsForStation(
     stationId: string,
     startDate: Date,
@@ -74,12 +92,16 @@ export class WaterQualityRepository implements IWaterQualityRepository {
 
   importData(): Promise<ImportedInfluxObject[]> {
     const relevantStations = JSON.stringify(
-      this.configService.config.relevantStations,
+      this.configService.loadConfigFromFile().relevantStations,
     );
     const query = `import "experimental/csv"
                    csv.from(url: "https://raw.githubusercontent.com/influxdata/influxdb2-sample-data/master/noaa-ndbc-data/latest-observations-annotated.csv")
                    |> filter(fn: (r) => contains(value: r["station_id"], set: ${relevantStations}))
                    |> to(bucket: "${this.influxDbConnection.bucket}")`;
-    return this.influxDbConnection.queryApi.collectRows(query);
+    try {
+      return this.influxDbConnection.queryApi.collectRows(query);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

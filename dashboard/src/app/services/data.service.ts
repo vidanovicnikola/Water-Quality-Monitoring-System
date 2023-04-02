@@ -16,8 +16,19 @@ export class DataService {
   baseUrl = 'http://localhost:3000/WaterQuality';
   constructor(private http: HttpClient, private charts: ChartsService) {}
 
-  getSignalsRange(): Observable<AppConfig> {
-    return this.http.get<AppConfig>(`${this.baseUrl}/SignalRanges`);
+  getAllSignalNames(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/SignalNames`);
+  }
+
+  getAppConfig(): Observable<AppConfig> {
+    return this.http.get<AppConfig>(`${this.baseUrl}/SignalSettings`);
+  }
+
+  saveAppConfig(settings: AppConfig): Observable<AppConfig> {
+    return this.http.post<AppConfig>(
+      `${this.baseUrl}/SignalSettings`,
+      settings
+    );
   }
 
   getStationInfo(stationId: string): Observable<Station[]> {
@@ -49,13 +60,13 @@ export class DataService {
         params: httpParams,
       }
     );
-    const ranges$ = this.getSignalsRange();
-    return forkJoin([signals$, ranges$]).pipe(
-      map(([charts, ranges]) =>
+    const config$ = this.getAppConfig();
+    return forkJoin([signals$, config$]).pipe(
+      map(([charts, config]) =>
         charts.map((chart) =>
           this.charts.getStandardChart(
             chart,
-            ranges.normalValues.find((x) => x.signal == chart.titile)
+            config.signals.find((x) => x.name == chart.titile)
           )
         )
       )
@@ -80,13 +91,14 @@ export class DataService {
         params: httpParams,
       }
     );
-    const ranges$ = this.getSignalsRange();
-    return forkJoin([signals$, ranges$]).pipe(
-      map(([charts, ranges]) =>
+
+    const config$ = this.getAppConfig();
+    return forkJoin([signals$, config$]).pipe(
+      map(([charts, config]) =>
         charts.map((chart) =>
           this.charts.getStandardChart(
             chart,
-            ranges.normalValues.find((x) => x.signal == signalName)
+            config.signals.find((x) => x.name == signalName)
           )
         )
       )

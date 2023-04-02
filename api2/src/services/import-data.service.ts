@@ -5,6 +5,7 @@ import { Warning } from 'src/model/warning';
 import { ImportedInfluxObject, InfluxObject } from 'src/model/influx-object';
 import { ConfigService } from './config.service';
 import { IWaterQualityRepository } from 'src/repository/water-quality-repository-interface';
+import { ValueRange } from 'src/model/app-config';
 
 @Injectable()
 export class ImportDataService {
@@ -16,7 +17,7 @@ export class ImportDataService {
     private configService: ConfigService,
   ) {}
 
-  @Cron('0 */1 * * * *')
+  @Cron('0 */15 * * * *')
   importData() {
     this.waterQualityRepository.importData().then((data) => {
       const alerts = this.processDataStream(data);
@@ -25,12 +26,12 @@ export class ImportDataService {
   }
 
   private processDataStream(data: ImportedInfluxObject[]): Warning[] {
-    const filters = this.configService.config.normalValues;
+    const filters = this.configService.loadConfigFromFile().signals;
     var result = data
       .filter((x) =>
         this.checkValue(
           x,
-          filters.find((f) => f.signal == x._field),
+          filters.find((f) => f.name == x._field),
         ),
       )
       .map((x) => ({
@@ -44,11 +45,18 @@ export class ImportDataService {
 
   checkValue(
     dataPoint: ImportedInfluxObject,
-    filter?: { signal: string; min: number; max: number },
+    filter?: {
+      name: string;
+      displayRange: ValueRange;
+      optimalRange: ValueRange;
+    },
   ): boolean {
     if (filter == null) return false;
 
-    if (dataPoint._value < filter.min || dataPoint._value > filter.max)
+    if (
+      dataPoint._value < filter.optimalRange.from ||
+      dataPoint._value > filter.optimalRange.to
+    )
       return true;
   }
 }

@@ -12,7 +12,7 @@
 
         <button mat-raised-button color="primary" (click)="load()">Load</button>
     </div>
-    <div class="signals__main" *ngIf="signalsLoading == false; else signalsLoadingIndicator">
+    <div class="signals__main" *ngIf="charts && charts.length > 0; else signalsLoadingIndicator">
         <highcharts-chart *ngFor="let chart of charts" [Highcharts]="Highcharts" [options]="chart"
             style="width: 100%; height: 400px; display: block;">
         </highcharts-chart>

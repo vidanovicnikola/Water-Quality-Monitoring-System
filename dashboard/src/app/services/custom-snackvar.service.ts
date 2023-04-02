@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomSnackbarComponent } from '../snackbar/custom-snackbar.component';
 import { StationWarnings } from '../model/station-warnings';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class CustomSnackBarService {
   public openSnackBar(data: StationWarnings[]) {
     this.snackBar.openFromComponent(CustomSnackbarComponent, {
       duration: 1000000,
-      horizontalPosition: 'center',
+      horizontalPosition: 'right',
       verticalPosition: 'bottom',
       data,
     });
